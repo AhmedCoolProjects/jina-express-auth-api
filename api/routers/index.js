@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+  updateProfile,
+  deleteUser,
 } from "../../utils/firebase.js";
 
 const router = Router();
@@ -38,6 +40,8 @@ authRouter.post("/login", (req, res) => {
         email: userCredentials.user.email,
         uid: userCredentials.user.uid,
         emailVerified: userCredentials.user.emailVerified,
+        photoURL: userCredentials.user.photoURL,
+        displayName: userCredentials.user.displayName,
       });
     })
     .catch((error) => {
@@ -68,6 +72,73 @@ authRouter.post("/verification", (req, res) => {
     .then(() => {
       res.send({
         message: "Verification email sent",
+      });
+    })
+    .catch((error) => {
+      res.status(500).send({
+        error: error.message,
+        eroorCode: error.code,
+      });
+    });
+});
+
+authRouter.post("/photourl", (req, res) => {
+  const { photoUrl } = req.body;
+  updateProfile(auth.currentUser, {
+    photoURL: photoUrl,
+  })
+    .then(() => {
+      res.send({
+        message: "Photo url updated",
+      });
+    })
+    .catch((error) => {
+      res.status(500).send({
+        error: error.message,
+        eroorCode: error.code,
+      });
+    });
+});
+
+authRouter.get("/infos", (req, res) => {
+  if (auth.currentUser) {
+    res.send({
+      email: auth.currentUser.email,
+      uid: auth.currentUser.uid,
+      emailVerified: auth.currentUser.emailVerified,
+      photoURL: auth.currentUser.photoURL,
+      displayName: auth.currentUser.displayName,
+    });
+  } else {
+    res.status(500).send({
+      error: "User not logged in",
+    });
+  }
+});
+
+authRouter.post("/update", (req, res) => {
+  const { displayName } = req.body;
+  updateProfile(auth.currentUser, {
+    displayName: displayName,
+  })
+    .then(() => {
+      res.send({
+        message: "Profile updated",
+      });
+    })
+    .catch((error) => {
+      res.status(500).send({
+        error: error.message,
+        eroorCode: error.code,
+      });
+    });
+});
+
+authRouter.post("/delete", (req, res) => {
+  deleteUser(auth.currentUser)
+    .then(() => {
+      res.send({
+        message: "User deleted",
       });
     })
     .catch((error) => {

@@ -6,6 +6,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+  updateProfile,
+  deleteUser,
 } from "firebase/auth";
 import dotenv from "dotenv";
 
@@ -32,4 +34,6 @@ export {
   signInWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+  updateProfile,
+  deleteUser,
 };
