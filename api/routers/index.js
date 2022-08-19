@@ -52,7 +52,7 @@ authRouter.post("/login", (req, res) => {
     });
 });
 
-authRouter.post("logout", (req, res) => {
+authRouter.post("/logout", (req, res) => {
   signOut(auth)
     .then(() => {
       res.send({
